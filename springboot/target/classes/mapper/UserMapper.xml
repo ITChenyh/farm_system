@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cyh.mapper.UserMapper">
+
+    <select id="selectAll" resultType="com.cyh.entity.User">
+        select * from user
+        <where>
+            <if test="name != null"> and name like concat('%', #{name}, '%')</if>
+        </where>
+        order by id desc
+    </select>
+
+    <insert id="insert" parameterType="com.cyh.entity.User" useGeneratedKeys="true">
+        insert into user(id, username, password, name, avatar, role, sex, phone, email)
+        values (#{id}, #{username}, #{password}, #{name}, #{avatar}, #{role}, #{sex}, #{phone}, #{email})
+    </insert>
+
+    <update id="updateById" parameterType="com.cyh.entity.User">
+        update user set username = #{username}, password = #{password}, name = #{name}, avatar = #{avatar}, role = #{role}, sex = #{sex}, phone = #{phone}, email = #{email}
+        where id = #{id} 
+    </update>
+
+</mapper>

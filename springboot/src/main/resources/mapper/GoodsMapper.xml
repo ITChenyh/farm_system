@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cyh.mapper.GoodsMapper">
+
+    <select id="selectAll" resultType="com.cyh.entity.Goods">
+        select goods.* , category.name as categoryName from goods inner join category on
+        goods.category_id = category.id
+        <where>
+            <if test="name != null"> and goods.name like concat('%', #{name}, '%')</if>
+            <if test="categoryId != null"> and goods.category_id = #{categoryId}</if>
+        </where>
+        order by id desc
+    </select>
+
+    <insert id="insert" parameterType="com.cyh.entity.Goods" useGeneratedKeys="true">
+        insert into goods(id, name, img, description, specials, price, unit, store,
+                          category_id)
+        values (#{id}, #{name}, #{img}, #{description}, #{specials}, #{price}, #{unit}, #{store},
+                    (SELECT id
+                     FROM category
+                     WHERE name = #{categoryName}
+                    LIMIT 1
+               ))
+    </insert>
+
+    <update id="updateById" parameterType="com.cyh.entity.Goods">
+        UPDATE goods
+        SET
+            name = #{name},
+            img = #{img},
+            description = #{description},
+            specials = #{specials},
+            price = #{price},
+            unit = #{unit},
+            store = #{store},
+            category_id =
+            <choose>
+                <when test="categoryId != null">#{categoryId}</when>
+                <otherwise>
+                    (
+                    SELECT id
+                    FROM category
+                    WHERE name = #{categoryName}
+                    LIMIT 1
+                    )
+                </otherwise>
+            </choose>
+        WHERE
+            id = #{id}
+    </update>
+
+</mapper>

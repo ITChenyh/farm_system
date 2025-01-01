@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cyh.mapper.OrdersMapper">
+
+    <select id="selectAll" resultType="com.cyh.entity.Orders">
+        select orders.* , goods.name as goodsName from orders inner join goods on
+        orders.goods_id = goods.id
+        <where>
+            <if test="orderNo != null"> and orders.order_no = #{orderNo}</if>
+            <if test="role == 'USER'"> and orders.user_id = #{userId}</if>
+            <if test="goodsName != null"> and goods.name like concat('%', #{goodsName}, '%')</if>
+        </where>
+        order by id desc
+    </select>
+
+    <insert id="insert" parameterType="com.cyh.entity.Orders" useGeneratedKeys="true">
+        insert into orders(id, order_no, goods_id, num, user_id, status, time)
+        values (#{id}, #{orderNo}, #{goodsId}, #{num}, #{userId}, #{status}, #{time})
+    </insert>
+
+    <update id="updateById" parameterType="com.cyh.entity.Orders">
+        UPDATE orders SET order_no = #{orderNo}, goods_id = #{goodsId}, num = #{num}, user_id = #{userId}, status = #{status}, time = #{time} WHERE id = #{id}
+    </update>
+
+</mapper>
