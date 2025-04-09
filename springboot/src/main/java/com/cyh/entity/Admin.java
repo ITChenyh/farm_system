@@ -18,6 +18,10 @@ public class Admin extends Account {
     /** 角色标识 */
     private String role;
 
+    public Admin() {
+        super();
+    }
+
     @Override
     public Integer getId() {
         return id;

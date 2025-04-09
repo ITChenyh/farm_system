@@ -26,7 +26,7 @@ import {ElMessage} from "element-plus";
 import router from "@/router";
 
 const data = reactive({
-  user: JSON.parse(localStorage.getItem('system-user') || '{}'),
+  user: JSON.parse(localStorage.getItem('user-info') || '{}'),
 })
 
 // 把当前修改的用户信息存储到后台数据库
@@ -39,7 +39,7 @@ const save = () => {
     if (res.code === '200') {
       ElMessage.success('修改密码成功')
       //把更新后的用户信息存储到缓存
-      localStorage.setItem('system-user', JSON.stringify(data.user))
+      localStorage.setItem('user-info', JSON.stringify(data.user))
       router.push('/login')
     } else {
       ElMessage.error(res.msg)

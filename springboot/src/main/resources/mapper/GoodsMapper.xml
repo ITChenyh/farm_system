@@ -5,13 +5,16 @@
 <mapper namespace="com.cyh.mapper.GoodsMapper">
 
     <select id="selectAll" resultType="com.cyh.entity.Goods">
-        select goods.* , category.name as categoryName from goods inner join category on
-        goods.category_id = category.id
+        select goods.* from goods
         <where>
             <if test="name != null"> and goods.name like concat('%', #{name}, '%')</if>
             <if test="categoryId != null"> and goods.category_id = #{categoryId}</if>
         </where>
         order by id desc
+    </select>
+
+    <select id="selectByPage" resultType="com.cyh.entity.Goods">
+        SELECT * FROM goods WHERE id &lt; #{lastPageId} ORDER BY id DESC LIMIT #{pageSize};
     </select>
 
     <insert id="insert" parameterType="com.cyh.entity.Goods" useGeneratedKeys="true">
@@ -24,6 +27,10 @@
                     LIMIT 1
                ))
     </insert>
+
+    <update id="orderUpdateById" parameterType="com.cyh.entity.Goods">
+        UPDATE goods SET store = store - #{number} WHERE id = #{id} AND store >= #{number}
+    </update>
 
     <update id="updateById" parameterType="com.cyh.entity.Goods">
         UPDATE goods

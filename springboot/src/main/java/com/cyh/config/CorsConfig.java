@@ -1,4 +1,4 @@
-package com.cyh.common;
+package com.cyh.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

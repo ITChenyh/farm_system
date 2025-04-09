@@ -4,6 +4,7 @@ package com.cyh.entity;
  * 角色用户父类
  */
 public class Account {
+
     private Integer id;
     /** 用户名 */
     private String username;
@@ -18,6 +19,19 @@ public class Account {
     /** 头像 */
     private String avatar;
 
+    public Account(){
+        ;
+    }
+
+    public Account(Integer id, String username, String name, String password, String role, String newPassword, String avatar) {
+        this.id = id;
+        this.username = username;
+        this.name = name;
+        this.password = password;
+        this.role = role;
+        this.newPassword = newPassword;
+        this.avatar = avatar;
+    }
 
     public Integer getId() {
         return id;

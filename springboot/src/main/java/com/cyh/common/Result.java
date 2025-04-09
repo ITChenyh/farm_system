@@ -22,6 +22,7 @@ public class Result {
     public static Result success(Object data) {
         Result result = success();
         result.setData(data);
+        System.out.println("result.data + " + result.data);
         return result;
     }
 

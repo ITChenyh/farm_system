@@ -1,0 +1,42 @@
+server:
+  port: 9090
+
+# 数据库配置
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root
+    url: jdbc:mysql://localhost:3306/farm_system?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=GMT%2b8&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true
+    hikari:
+      maximum-pool-size: 20
+      connection-timeout: 30000
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+  data:
+    elasticsearch:
+      repositories:
+        enabled: true # 开启ES仓库配置，自动为仓库接口生成实现类
+  elasticsearch:
+    uris: http://localhost:9200 # ES的连接地址及端口号
+    connection-timeout: 30s
+    socket-timeout: 30s
+
+# 批量插入数据配置
+batch:
+  insert:
+    chunk-size: 5000    # 每批次插入数量
+    thread-pool-size: 8 # 并发线程数（根据CPU核心数调整）
+
+
+# 配置mybatis实体和xml映射
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+
+# 文件上传的前缀url
+fileBaseUrl: http://localhost:9090

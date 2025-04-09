@@ -7,11 +7,45 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: root
-    url: jdbc:mysql://localhost:3306/farm_system?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=GMT%2b8&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost:3306/farm_system?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=GMT%2b8&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true
+    hikari:
+      maximum-pool-size: 20
+      connection-timeout: 30000
   servlet:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
+  data:
+    elasticsearch:
+      repositories:
+        enabled: true # 开启ES仓库配置，自动为仓库接口生成实现类
+    redis:
+      host: localhost
+      database: 0
+      port: 6379 # Redis服务器连接端口
+      password: # Redis服务器连接密码（默认为空）
+      timeout: 1000ms # 连接超时时间
+      default-type: string
+  elasticsearch:
+    uris: http://localhost:9200 # ES的连接地址及端口号
+    connection-timeout: 30s
+    socket-timeout: 30s
+  rabbitmq:
+    host: localhost
+    port: 5672
+    virtual-host: /farm
+    username: farm
+    password: farm
+    publisher-returns: true #消息发送到队列确认
+    publisher-confirm-type: simple #消息发送到交换器确认
+
+
+# 批量插入数据配置
+batch:
+  insert:
+    chunk-size: 5000    # 每批次插入数量
+    thread-pool-size: 8 # 并发线程数（根据CPU核心数调整）
+
 
 # 配置mybatis实体和xml映射
 mybatis:

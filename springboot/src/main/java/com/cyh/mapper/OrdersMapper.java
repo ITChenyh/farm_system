@@ -28,10 +28,16 @@ public interface OrdersMapper {
     int updateById(Orders orders);
 
     /**
-      * 根据ID查询
+      * 根据数据库表ID查询
     */
     @Select("select * from orders where id = #{id}")
     Orders selectById(Integer id);
+
+    /**
+     * 根据订单ID查询
+     */
+    @Select("select * from orders where order_no = #{orderId}")
+    Orders selectByOrderId(String orderId);
 
     /**
       * 查询所有，分管理员和普通用户

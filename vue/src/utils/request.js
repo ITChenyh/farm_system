@@ -10,8 +10,13 @@ const request = axios.create({
 // request 拦截器
 // 可以自请求发送前对请求做一些处理
 request.interceptors.request.use(config => {
+    const token = localStorage.getItem('token'); // 确保键名与存储一致
+    if (token) {
+        config.headers['Authorization'] = `${token}`;
+    }
     config.headers['Content-Type'] = 'application/json;charset=utf-8';
     return config
+
 }, error => {
     return Promise.reject(error)
 });
@@ -20,6 +25,7 @@ request.interceptors.request.use(config => {
 // 可以在接口响应后统一处理结果
 request.interceptors.response.use(
     response => {
+        console.log("服务器传来了" + response)
         let res = response.data;
         // 如果是返回的文件
         if (response.config.responseType === 'blob') {

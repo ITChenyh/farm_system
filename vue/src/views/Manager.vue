@@ -29,6 +29,10 @@
             <el-icon><Goods /></el-icon>
             <span>产品购买</span>
           </el-menu-item>
+          <el-menu-item index="/purchaseSeckill" v-if="data.user.role == 'USER'">
+            <el-icon><Goods /></el-icon>
+            <span>产品秒杀</span>
+          </el-menu-item>
           <el-menu-item index="/notice" v-if="data.user.role == 'ADMIN'">
             <el-icon><Bell /></el-icon>
             <span>公告管理</span>
@@ -63,6 +67,10 @@
             <el-menu-item index="/goodsStock">
               <el-icon><GoodsFilled /></el-icon>
               <span>农产品进货管理</span>
+            </el-menu-item>
+            <el-menu-item index="/seckill">
+              <el-icon><Goods /></el-icon>
+              <span>秒杀产品信息管理</span>
             </el-menu-item>
           </el-sub-menu>
           <!--TODO: index-->
@@ -102,9 +110,30 @@
 import { reactive } from "vue";
 import router from "@/router";
 import {ElMessage} from "element-plus";
+import request from "@/utils/request";
+
+const login = () => {
+  formRef.value.validate((valid => {
+    if (valid) {
+      // 调用后台的接口
+      request.post('/login', data.form).then(res => {
+        if (res.code === '200') {
+          ElMessage.success("登录成功")
+          console.log("取消JSON.stringify" + res.data)
+          localStorage.setItem('user-info', res.data)
+          router.push('/')
+        } else {
+          ElMessage.error(res.msg)
+        }
+      })
+    }
+  })).catch(error => {
+    console.error(error)
+  })
+}
 
 const data = reactive({
-  user: JSON.parse(localStorage.getItem('system-user') || '{}')
+  user : JSON.parse(localStorage.getItem('user-info') || '{}')
 })
 
 if (!data.user?.id) {
@@ -113,12 +142,12 @@ if (!data.user?.id) {
 }
 
 const updateUser = () => {
-  data.user = JSON.parse(localStorage.getItem('system-user') || '{}')
+  data.user = JSON.parse(localStorage.getItem('user-info') || '{}')
 }
 
 const logout = () => {
   ElMessage.success('退出成功')
-  localStorage.removeItem('system-user')
+  localStorage.removeItem('user-info')
   router.push('/login')
 }
 </script>

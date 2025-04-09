@@ -19,7 +19,7 @@ import java.nio.charset.StandardCharsets;
 @RequestMapping("/files")
 public class FileController {
 
-    // 表示本地磁盘文件的存储路径
+    // 表示本地磁盘文件的存储路径，是当前工作目录（动态，取决于程序启动位置）
     private static final String filePath = System.getProperty("user.dir") + "/files/";
 
     @Value("${fileBaseUrl}")

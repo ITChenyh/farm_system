@@ -3,7 +3,7 @@
 
     <div class="card" style="margin-bottom: 5px;">
       <el-input v-model="data.name" style="width: 300px; margin-right: 10px" placeholder="请输入农产品名称查询"></el-input>
-      <el-button type="primary" @click="load">查询</el-button>
+      <el-button type="primary" @click="loadEs">查询</el-button>
       <el-button type="info" style="margin: 0 10px" @click="reset">重置</el-button>
     </div>
 
@@ -43,7 +43,7 @@
           <el-input v-model="data.form.name" autocomplete="off" />
         </el-form-item>
         <el-form-item label="图片" prop="img">
-          <el-upload :action="uploadUrl" list-type="picture" :on-success="handleImgSuccess">
+          <el-upload :action="uploadUrl" list-type="picture" :on-success="handleImgSuccess" :headers="{ Authorization: data.token }">
             <el-button type="primary">上传图片</el-button>
           </el-upload>
         </el-form-item>
@@ -100,7 +100,8 @@ const data = reactive({
   form: {},
   tableData: [],
   name: null,
-  categoryList: []
+  categoryList: [],
+  token: localStorage.getItem('token')
 })
 
 //获取所有分类
@@ -115,6 +116,20 @@ const load = () => {
       pageNum: data.pageNum,
       pageSize: data.pageSize,
       categoryName: data.name
+    }
+  }).then(res => {
+    data.tableData = res.data?.list
+    data.total = res.data?.total
+  })
+}
+
+// 根据Es分页查询
+const loadEs = () => {
+  request.get('/goods/search', {
+    params: {
+      keyword: data.name,
+      page: data.pageNum,
+      size: data.pageSize
     }
   }).then(res => {
     data.tableData = res.data?.list

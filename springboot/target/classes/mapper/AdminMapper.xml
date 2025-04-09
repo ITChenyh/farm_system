@@ -12,6 +12,7 @@
         order by id desc
     </select>
 
+
     <insert id="insert" parameterType="com.cyh.entity.Admin" useGeneratedKeys="true">
         insert into admin(id, username, password, name, avatar, role)
         values (#{id}, #{username}, #{password}, #{name}, #{avatar}, #{role})

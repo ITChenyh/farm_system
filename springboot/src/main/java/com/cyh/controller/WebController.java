@@ -1,5 +1,11 @@
 package com.cyh.controller;
 
+import cn.hutool.core.date.DateField;
+import cn.hutool.core.date.DateTime;
+import cn.hutool.jwt.JWTPayload;
+import cn.hutool.jwt.JWTUtil;
+import cn.hutool.jwt.signers.JWTSignerUtil;
+import com.cyh.common.MyJWTUtil;
 import com.cyh.common.Result;
 import com.cyh.entity.Account;
 import com.cyh.entity.User;
@@ -7,6 +13,9 @@ import com.cyh.service.AdminService;
 import com.cyh.service.UserService;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 @RestController
@@ -38,6 +47,30 @@ public class WebController {
         if ("USER".equals(account.getRole())) {
             ac = userService.login(account);
         }
+
+        System.out.println(ac);
+
+        return Result.success(MyJWTUtil.generateToken(ac));
+    }
+
+    /**
+     * 登录后获取用户信息
+     */
+    @PostMapping("/loginInfo")
+    public Result loginInfo(@RequestBody Account account) {
+        Account ac = null;
+        if ("ADMIN".equals(account.getRole())) {
+            ac = adminService.login(account);
+        }
+        if ("USER".equals(account.getRole())) {
+            ac = userService.login(account);
+        }
+
+        ac.setNewPassword("");
+        ac.setPassword("");
+
+        System.out.println(ac);
+
         return Result.success(ac);
     }
 

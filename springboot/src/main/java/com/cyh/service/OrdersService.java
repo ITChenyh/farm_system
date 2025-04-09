@@ -6,6 +6,7 @@ import com.cyh.entity.Goods;
 import com.cyh.entity.Orders;
 import com.cyh.exception.CustomException;
 import com.cyh.mapper.OrdersMapper;
+import com.cyh.mapper.SeckillMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import jakarta.annotation.Resource;
@@ -24,9 +25,11 @@ public class OrdersService {
     private OrdersMapper ordersMapper;
     @Resource
     private GoodsService goodsService;
+    @Resource
+    private SeckillMapper seckillMapper;
 
     /**
-     * 新增
+     * 新增订单
      */
     @Transactional
     public void add(Orders orders) {
@@ -42,13 +45,25 @@ public class OrdersService {
         if(store < orders.getNum()){
             throw new CustomException("商品库存不足");
         }
-        goods.setStore(store - orders.getNum());
-        goodsService.updateById(goods);
+
+        Integer ifSuc = goodsService.orderUpdateById(goods.getId(), orders.getNum());
+        if(ifSuc < 1){
+            System.out.println("抢购失败啦");
+            throw new CustomException("抢购失败");
+        }
+        ordersMapper.insert(orders); //可以改成向mq发送消息
+    }
+
+    /**
+     * 直接插入订单
+     */
+    @Transactional
+    public void insert(Orders orders) {
         ordersMapper.insert(orders);
     }
 
     /**
-     * 删除
+     * 普通商品订单删除
      */
     public void deleteById(Integer id) {
         Orders o = ordersMapper.selectById(id);
@@ -58,6 +73,14 @@ public class OrdersService {
             goodsService.updateById(g);
         }
         ordersMapper.deleteById(id);
+    }
+
+    /**
+     * 秒杀商品订单删除，MySQL数据库处理
+     */
+    public void deleteSeckillOrderById(Integer id, Integer goodsId) {
+        ordersMapper.deleteById(id);
+        seckillMapper.increStoreById(goodsId);
     }
 
     /**
@@ -72,6 +95,13 @@ public class OrdersService {
      */
     public Orders selectById(Integer id) {
         return ordersMapper.selectById(id);
+    }
+
+    /**
+     * 根据订单ID查询
+     */
+    public Orders selectByOrderId(String orderId) {
+        return ordersMapper.selectByOrderId(orderId);
     }
 
     /**

@@ -48,7 +48,7 @@ const data = reactive({
   form: {},
   tableData: [],
   name: null,
-  user: JSON.parse(localStorage.getItem('system-user') || '{}')
+  user: JSON.parse(localStorage.getItem('user-info') || '{}')
 })
 
 

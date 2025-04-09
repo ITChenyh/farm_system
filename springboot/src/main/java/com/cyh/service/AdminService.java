@@ -84,6 +84,7 @@ public class AdminService {
      */
     public Account login(Account account) {
         Account dbAdmin = adminMapper.selectByUsername(account.getUsername());
+        System.out.println("dbAdmin = " + dbAdmin);
         if (ObjectUtil.isNull(dbAdmin)) {
             throw new CustomException("用户不存在");
         }

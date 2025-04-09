@@ -74,7 +74,7 @@ const data = reactive({
   name: null,
   categoryList: [],
   activeCategoryId : null,
-  user: JSON.parse(localStorage.getItem('system-user') || '{}')
+  user: JSON.parse(localStorage.getItem('user-info') || '{}')
 })
 
 const loadCategoryGoods = (id) => {
@@ -111,7 +111,7 @@ const handleCal= (item) => {
 
 // 购买
 const buy= (item) => {
-  let order = {goodsId: item.id, num: item.num, userId: data.user.id, status: "待发货"}
+  let order = {goodsId: item.id, num: item.num, userId: data.user.id, status: "待支付"}
   request.post('orders/add', order).then(res => {
     if (res.code === '200') {
       load()

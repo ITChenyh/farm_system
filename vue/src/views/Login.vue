@@ -53,15 +53,25 @@
     formRef.value.validate((valid => {
       if (valid) {
         // 调用后台的接口
+        console.log(data.form)
         request.post('/login', data.form).then(res => {
           if (res.code === '200') {
-            ElMessage.success("登录成功")
-            router.push('/')
-            localStorage.setItem('system-user', JSON.stringify(res.data))
+            console.log("取消JSON.stringify" + res.data)
+            localStorage.setItem('token', res.data)
+            request.post('/loginInfo', data.form).then(res => {
+              if (res.code === '200') {
+                ElMessage.success("登录成功")
+                localStorage.setItem('user-info', JSON.stringify(res.data))
+                router.push('/')
+              } else {
+                ElMessage.error(res.msg)
+              }
+            })
           } else {
             ElMessage.error(res.msg)
           }
         })
+
       }
     })).catch(error => {
       console.error(error)

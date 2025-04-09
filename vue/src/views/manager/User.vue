@@ -54,7 +54,7 @@
           <el-input v-model="data.form.name" autocomplete="off" />
         </el-form-item>
         <el-form-item label="头像" prop="avatar">
-          <el-upload :action="uploadUrl" list-type="picture" :on-success="handleImgSuccess">
+          <el-upload :action="uploadUrl" list-type="picture" :on-success="handleImgSuccess" :headers="{ Authorization: data.token }">
             <el-button type="primary">上传图片</el-button>
           </el-upload>
         </el-form-item>
@@ -100,7 +100,8 @@ const data = reactive({
   formVisible: false,
   form: {},
   tableData: [],
-  name: null
+  name: null,
+  token: localStorage.getItem('token')
 })
 
 // 分页查询
