@@ -1,7 +1,8 @@
 # 阿强农场（农产品销售平台及管理系统）
 ## 项目简介
 面向家乡农产品合作社的实际场景所开发，包括前台商城系统和后台管理系统，前台商城系统主要包含首页公告、商品搜索、商品展示、商品购买、商品秒杀、订单流程等模块，后台管理系统包含公告管理、用户管理、商品管理、秒杀管理、订单管理等模块。
-相关技术：SpringBoot3、MyBatis、MySQL、Redis、RabbitMQ、Elasticsearch，Vue3、Element-plus
+## 相关技术
+SpringBoot3、MyBatis、MySQL、Redis、RabbitMQ、Elasticsearch，Vue3、Element-plus
 ## 个人职责
 该项目由个人独立完成，负责分离式前后端的设计与开发，包括前后端整体框架搭建、认证授权框架整合、电商系统功能设计、秒杀场景优化、数据库设计与优化等。
 ## 技术要点
